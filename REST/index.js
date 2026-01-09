@@ -10,9 +10,11 @@ const path = require('path');
  */
 
 // Parses form data sent via HTML forms (POST /comments)
+// Makes form data available on req.body
 app.use(express.urlencoded({ extended: true }));
 
 // Parses JSON request bodies (used in APIs / Postman / fetch)
+// Makes JSON data available on req.body
 app.use(express.json());
 
 /**
@@ -22,13 +24,14 @@ app.use(express.json());
 // Tells Express where EJS templates are located
 app.set('views', path.join(__dirname, 'views'));
 
-// Tells Express that we are using EJS
+// Tells Express that we are using EJS as the template engine
 app.set('view engine', 'ejs');
 
 /**
  * -------- FAKE DATABASE --------
  * This array represents stored comments.
- * In real apps, this would be a database - here we are using the arrays.
+ * In real apps, this would be a database.
+ * Here, we are using an in-memory array.
  */
 const comments = [
     { username: 'Jay', comment: 'There you go guys...' },
@@ -46,6 +49,10 @@ const comments = [
  * Purpose: Get ALL comments
  */
 app.get('/comments', (req, res) => {
+
+    // res.render():
+    // Renders an EJS template into HTML and sends it to the browser
+    // Also passes data (comments) to the template
     res.render('comments/index.ejs', { comments });
 });
 
@@ -55,6 +62,9 @@ app.get('/comments', (req, res) => {
  * Purpose: Show form to CREATE a new comment
  */
 app.get('/comments/new', (req, res) => {
+
+    // res.render():
+    // Sends the HTML form page to the browser
     res.render('comments/new.ejs');
 });
 
@@ -66,11 +76,19 @@ app.get('/comments/new', (req, res) => {
 app.post('/comments', (req, res) => {
     const { username, comment } = req.body;
 
-    // Add new comment to "database" - here push into the array
+    // Add new comment to "database" (in-memory array)
     comments.push({ username, comment });
 
-    // Normally REST redirects after POST
-    res.send("It Worked");
+    // res.redirect():
+    // Sends a redirect response to the browser
+    // Browser will make a NEW GET request to /comments
+    // This follows the POST -> REDIRECT -> GET pattern
+    // Default status code is 302
+    res.redirect('/comments');
+
+    // Note:
+    // res.send() could be used to send plain text or JSON,
+    // but redirect is preferred here to avoid form re-submission.
 });
 
 /**

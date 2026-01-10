@@ -7,9 +7,34 @@
 </head>
 <body>
     <h1>Edit the comment</h1>
-    <form method="POST" action="/comments/<%= comment.id %>?_method=PATCH">
-        <textarea name="comment"><%= comment.comment %></textarea>
-        <button>Save</button>
-    </form>
+    <!-- 
+    Edit Comment Form
+    -----------------
+    Purpose:
+    - Allows the user to update an existing comment
+    - HTML forms only support GET and POST
+    - method-override is used to simulate a PATCH request
+-->
+
+<form method="POST" action="/comments/<%= comment.id %>?_method=PATCH">
+    
+    <!-- 
+        Textarea for editing the comment text
+        - "name=comment" is important because:
+          Express reads this value using req.body.comment
+        - The existing comment text is pre-filled using EJS
+    -->
+    <textarea name="comment"><%= comment.comment %></textarea>
+
+    <!-- 
+        Submit button
+        - Sends the form data to the server
+        - method-override converts POST → PATCH
+        - Express route PATCH /comments/:id updates the comment
+    -->
+    <button>Save</button>
+
+</form>
+
 </body>
 </html>

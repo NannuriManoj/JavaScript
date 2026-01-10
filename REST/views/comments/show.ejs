@@ -6,15 +6,49 @@
     <title>Show</title>
 </head>
 <body>
-    <h1>Show the comments by ID</h1>
-      <h2>Comment ID: <%= comment.id %></h2>
-    <h3><%= comment.comment %> — <%= comment.username %></h3>
+<!-- 
+    Show Comment Page
+    -----------------
+    Purpose:
+    - Displays details of a single comment
+    - Allows user to navigate back, edit, or delete the comment
+-->
 
-    <a href="/comments">Back to index</a>
-    <a href="/comments/<%= comment.id %>/edit">Edit Comment</a>
+<h1>Show the comments by ID</h1>
 
-    <form method="POST" action="/comments/<%= comment.id %>?_method=DELETE">
-        <button>Delete</button>
-    </form>
+<!-- 
+    Display the unique ID of the comment
+    - comment.id is passed from the Express route
+-->
+<h2>Comment ID: <%= comment.id %></h2>
+
+<!-- 
+    Display the comment text along with the username
+    - Data is dynamically injected using EJS
+-->
+<h3><%= comment.comment %> — <%= comment.username %></h3>
+
+<!-- 
+    Navigation link to return to the comments index page
+-->
+<a href="/comments">Back to index</a>
+
+<!-- 
+    Link to the edit form for this comment
+    - Triggers GET /comments/:id/edit
+-->
+<a href="/comments/<%= comment.id %>/edit">Edit Comment</a>
+
+<!-- 
+    Delete Comment Form
+    ------------------
+    - HTML forms do not support DELETE method
+    - method-override is used to convert POST → DELETE
+    - Sends the comment ID in the URL
+-->
+<form method="POST" action="/comments/<%= comment.id %>?_method=DELETE">
+    <button>Delete</button>
+</form>
+
 </body>
 </html>

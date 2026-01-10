@@ -70,31 +70,102 @@ app.get('/comments/new', (req, res) => {
     res.render('comments/new.ejs');
 });
 
+/**
+ * -----------------------------------
+ * SHOW A SINGLE COMMENT (READ - ONE)
+ * GET /comments/:id
+ * Purpose:
+ *  - Fetch a single comment using its ID
+ *  - Display it on the show page
+ * -----------------------------------
+ */
 app.get('/comments/:id', (req, res) => {
+
+    // Extract the "id" parameter from the URL
+    // Example: /comments/123 → id = "123"
     const { id } = req.params;
-    const comment = comments.find(c => c.id === id)
+
+    // Find the comment whose id matches the URL id
+    // Array.find() returns the FIRST matching element or undefined
+    const comment = comments.find(c => c.id === id);
+
+    // Render the show.ejs template
+    // Pass the found comment to the view
     res.render('comments/show', { comment });
 });
 
+
+/**
+ * -----------------------------------
+ * SHOW EDIT FORM (READ - FORM PAGE)
+ * GET /comments/:id/edit
+ * Purpose:
+ *  - Fetch the comment by ID
+ *  - Show a pre-filled edit form
+ * -----------------------------------
+ */
 app.get('/comments/:id/edit', (req, res) => {
+
+    // Extract the comment ID from the URL
     const { id } = req.params;
-    const comment = comments.find(c => c.id === id)
+
+    // Find the comment that needs to be edited
+    const comment = comments.find(c => c.id === id);
+
+    // Render the edit.ejs template
+    // The comment is sent so the textarea can be pre-filled
     res.render('comments/edit', { comment });
-})
+});
 
+
+/**
+ * -----------------------------------
+ * UPDATE A COMMENT (UPDATE)
+ * PATCH /comments/:id
+ * Purpose:
+ *  - Update the text of an existing comment
+ * -----------------------------------
+ */
 app.patch('/comments/:id', (req, res) => {
-    const { id } = req.params;
-    const newComment = req.body.comment;
-    const foundComment = comments.find(c => c.id === id)
-    foundComment.comment = newComment;
-    res.redirect('/comments');
-})
 
-app.delete('/comments/:id', (req, res) => {
+    // Get the comment ID from the URL
     const { id } = req.params;
-    comments = comments.filter(c => c.id !== id);
+
+    // Get the updated comment text from the form body
+    const newComment = req.body.comment;
+
+    // Find the comment object that needs to be updated
+    const foundComment = comments.find(c => c.id === id);
+
+    // Update the comment text
+    foundComment.comment = newComment;
+
+    // Redirect to the comments list (POST-REDIRECT-GET pattern)
     res.redirect('/comments');
 });
+
+
+/**
+ * -----------------------------------
+ * DELETE A COMMENT (DELETE)
+ * DELETE /comments/:id
+ * Purpose:
+ *  - Remove a comment from the data source
+ * -----------------------------------
+ */
+app.delete('/comments/:id', (req, res) => {
+
+    // Extract the comment ID from the URL
+    const { id } = req.params;
+
+    // Filter out the comment with the matching ID
+    // This creates a NEW array without the deleted comment
+    comments = comments.filter(c => c.id !== id);
+
+    // Redirect back to the comments index page
+    res.redirect('/comments');
+});
+
 
 /**
  * CREATE (POST)

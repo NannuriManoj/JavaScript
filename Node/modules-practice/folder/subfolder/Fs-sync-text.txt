@@ -1,0 +1,1 @@
+The result is This is some txt - for 'path' module

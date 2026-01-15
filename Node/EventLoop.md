@@ -1,0 +1,3 @@
+- JavaScript is a single-threaded, non-blocking, asynchronous language.
+- The Event Loop is the mechanism that allows JavaScript to perform non-blocking operations even though it has only one main thread.
+- Since most modern kernels are multi-threaded, they can handle multiple operations executing in the background. When one of these operations completes, the kernel tells Node.js so that the appropriate callback may be added to the poll queue to eventually be executed. 

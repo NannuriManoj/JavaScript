@@ -1,3 +1,4 @@
+const { Console } = require('console');
 const fs = require('fs/promises');
 
 async function copyFile() {
@@ -14,4 +15,14 @@ async function copyFile() {
   }
 }
 
+const appendFile = async ()=>{
+  try {
+    await fs.appendFile('./folder/subfolder/text.txt', 'utf-8');
+    console.log("Append the file to the previous file");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+appendFile();
 copyFile();
